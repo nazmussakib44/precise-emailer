@@ -1,5 +1,5 @@
 # Precise Emailer
-A serverless precise scheduling system for your emails using Google cloud firestore, scheduler &amp; pub/sub. 
+A serverless precise scheduling system for your emails using Cloud Firestore, Scheduler &amp; Pub/Sub. 
 
 ## Features
 
