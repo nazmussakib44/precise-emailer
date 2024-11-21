@@ -31,6 +31,8 @@ uvicorn main:app
 
 Visit project home url /docs e.g. http://127.0.0.1:8000/docs and you will find swagger UI to test all the available API's
 
+(/images/swagger_ui.png?raw=true "Server Running")
+
 ## Authorization
 
 Press authorization button in swagger ui and put superadmin username & password to authorize. (Currently disabled)
@@ -56,7 +58,7 @@ As you can see the .env file is already there just get the credentials from your
 - Create default database with recommended configuration. (Manual database creation is not supported yet. Submit an issue to request the feature.)
 - And you are done with Firestore. 
 
-## How to setup Cloud Scheduler (Not implemented)
+## How to setup Cloud Scheduler 
 - Go to Cloud Scheduler dashboard (As you already enabled the service)
 - Create cron job. 
 - Select your timezone. 
@@ -64,16 +66,29 @@ As you can see the .env file is already there just get the credentials from your
 - Select job target to our endpint ('/process-scheduled-emails/')
 - And you are done with Cloud Scheduler.
 
-## How to setup Cloud Pub/Sub (Not implemented)
+## How to setup Cloud Pub/Sub
 - Go to Cloud Pub/Sub dashboard (As you already enabled the service)
 - Create a topic.  
-- Set retry timer 10 minutes (Recommended). 
-- Set execution target to our endpoint ('/pubsub-handler/') to send the email. 
+- Create subscription. 
+- Select subscription type - push 
+- Set endpoint url - https://your-domain/pubsub-handler
+- Set acknowledgement deadline to 10 seconds (If the response status code is not 200 ok, the pubsub will retry) 
+
+(/images/pubsub_sub_creation.png?raw=true "Pubsub Creation")
+
+(/images/subs_ack.png?raw=true "Acknowledgement Deadline")
 
 ## How to setup SendGrid (Not implemented)
-- In progress. 
+- Login to SendGrid
+- Generate API key through Full Access
+- Add the saved API key to projects .env file
+- Go to settings, Sender Verification. 
+- Add Sender to details to verify your sender email. 
+- Add the verified email to projects .env file (Which will be used as from Email to deliver the emails)
 
+(/images/sendgrid_api_key.png?raw=true "SendGrid API Key")
 
+(/images/sendgrid_sender_verification.png?raw=true "SendGrid Sender Verification")
 
 Now you are ready to go...
 
