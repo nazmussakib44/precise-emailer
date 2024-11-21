@@ -10,6 +10,9 @@ import json
 from fastapi.security import OAuth2PasswordBearer, OAuth2PasswordRequestForm
 from jose import JWTError, jwt
 from passlib.context import CryptContext
+from sendgrid import SendGridAPIClient
+from sendgrid.helpers.mail import Mail
+import base64
 
 # Load environment variables from .env file
 load_dotenv()
@@ -61,7 +64,7 @@ oauth2_scheme = OAuth2PasswordBearer(tokenUrl="token")
 # Firestore and Pub/Sub setup
 db = firestore.Client()
 publisher = pubsub_v1.PublisherClient()
-topic_path = publisher.topic_path('your-project-id', 'email-queue')
+topic_path = publisher.topic_path('cloud-technology-436021', 'email-queue')
 
 def verify_password(plain_password, hashed_password):
     return pwd_context.verify(plain_password, hashed_password)
@@ -141,8 +144,8 @@ async def send_email(
     email: str = Form(...),
     body: str = Form(...),
     attachment: UploadFile = None,
-    schedule_time: str = Form(...),
-    current_user: User = Depends(get_current_active_user)
+    schedule_time: str = Form(...), # 2025-12-15 15:30:00
+    # current_user: User = Depends(get_current_active_user)
 ):
     # Parse the schedule_time into a datetime object
     schedule_datetime = datetime.strptime(schedule_time, '%Y-%m-%d %H:%M:%S')
@@ -194,10 +197,35 @@ async def process_scheduled_emails(current_user: User = Depends(get_current_acti
     return {"message": "Scheduled emails processed."}
 
 @app.post("/pubsub-handler/")
-async def pubsub_handler(message: dict, current_user: User = Depends(get_current_active_user)):
-    # Parse message data
-    email_data = json.loads(message['data'])
-    
-    # Logic to send the email (use an email provider like SendGrid or Gmail here)
-    
-    return {"message": "Email processed."}
+async def pubsub_handler(
+    message: dict, 
+    # current_user: User = Depends(get_current_active_user) # unlocked to test
+    ):
+    # Decode the Pub/Sub message
+    # pubsub_message = base64.b64decode(message["message"]["data"]).decode("utf-8") # disabled to test sendgrid
+    # email_data = json.loads(message)
+    email_data = message # only to test directly with swagger UI
+
+    # Extract email details
+    email = email_data.get("email")
+    body = email_data.get("body")
+    # attachment_url = email_data.get("attachment_url")  
+    subject = email_data.get("subject", "Scheduled Email") 
+
+    # Compose the email
+    message = Mail(
+        from_email="takhi44@gmail.com",  # verified sender from Sendgrid
+        to_emails=email,
+        subject=subject,
+        plain_text_content=body
+    )
+
+    # Send the email
+    sg = SendGridAPIClient(os.getenv("SENDGRID_API_KEY"))
+    response = sg.send(message)
+
+    print(f"Status Code: {response}")
+    print(f"Body: {response.body}")
+    print(f"Headers: {response.headers}")
+
+    return {"message": "Email sent successfully!", "status_code": response.status_code}
