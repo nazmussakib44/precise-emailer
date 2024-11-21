@@ -214,7 +214,7 @@ async def pubsub_handler(
 
     # Compose the email
     message = Mail(
-        from_email="takhi44@gmail.com",  # verified sender from Sendgrid
+        from_email=os.getenv("SENDER_EMAIL"),  # verified sender from Sendgrid
         to_emails=email,
         subject=subject,
         plain_text_content=body
