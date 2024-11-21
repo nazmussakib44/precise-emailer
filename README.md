@@ -31,7 +31,7 @@ uvicorn main:app
 
 Visit project home url /docs e.g. http://127.0.0.1:8000/docs and you will find swagger UI to test all the available API's
 
-(/images/swagger_ui.png?raw=true "Server Running")
+![Server Running](/images/swagger_ui.png?raw=true "Server Running")
 
 ## Authorization
 
@@ -74,21 +74,22 @@ As you can see the .env file is already there just get the credentials from your
 - Set endpoint url - https://your-domain/pubsub-handler
 - Set acknowledgement deadline to 10 seconds (If the response status code is not 200 ok, the pubsub will retry) 
 
-(/images/pubsub_sub_creation.png?raw=true "Pubsub Creation")
+![Pubsub Creation](/images/pubsub_sub_creation.png?raw=true "Pubsub Creation")
 
-(/images/subs_ack.png?raw=true "Acknowledgement Deadline")
+![Acknowledgement Deadline](/images/subs_ack.png?raw=true "Acknowledgement Deadline")
 
-## How to setup SendGrid (Not implemented)
+## How to setup SendGrid 
 - Login to SendGrid
 - Generate API key through Full Access
 - Add the saved API key to projects .env file
 - Go to settings, Sender Verification. 
 - Add Sender to details to verify your sender email. 
 - Add the verified email to projects .env file (Which will be used as from Email to deliver the emails)
+- Manually trigger the pubsub handler endpoint from swagger ui to test the emails are deliverying or not. 
 
-(/images/sendgrid_api_key.png?raw=true "SendGrid API Key")
+![SendGrid API Key](/images/sendgrid_api_key.png?raw=true "SendGrid API Key")
 
-(/images/sendgrid_sender_verification.png?raw=true "SendGrid Sender Verification")
+![SendGrid Sender Verification](/images/sendgrid_sender_verification.png?raw=true "SendGrid Sender Verification")
 
 Now you are ready to go...
 
