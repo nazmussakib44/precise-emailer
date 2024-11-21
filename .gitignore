@@ -164,3 +164,4 @@ cython_debug/
 /precise-emailer/Include
 /precise-emailer/Scripts
 /precise-emailer/pyvenv.cfg
+/.env
