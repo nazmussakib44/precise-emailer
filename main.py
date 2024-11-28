@@ -121,7 +121,7 @@ async def get_current_active_user(current_user: User = Depends(get_current_user)
     return current_user
 
 @app.get("/")
-async def root(current_user: User = Depends(get_current_active_user)):
+async def root():
     return {"message": "Precise emailer running..."}
 
 @app.post("/token", response_model=Token)
@@ -145,7 +145,7 @@ async def send_email(
     body: str = Form(...),
     attachment: UploadFile = None,
     schedule_time: str = Form(...), # 2025-12-15 15:30:00
-    # current_user: User = Depends(get_current_active_user)
+    current_user: User = Depends(get_current_active_user)
 ):
     # Parse the schedule_time into a datetime object
     schedule_datetime = datetime.strptime(schedule_time, '%Y-%m-%d %H:%M:%S')
@@ -199,12 +199,12 @@ async def process_scheduled_emails(current_user: User = Depends(get_current_acti
 @app.post("/pubsub-handler/")
 async def pubsub_handler(
     message: dict, 
-    # current_user: User = Depends(get_current_active_user) # unlocked to test
+    current_user: User = Depends(get_current_active_user) # unlocked to test
     ):
     # Decode the Pub/Sub message
-    # pubsub_message = base64.b64decode(message["message"]["data"]).decode("utf-8") # disabled to test sendgrid
-    # email_data = json.loads(message)
-    email_data = message # only to test directly with swagger UI
+    pubsub_message = base64.b64decode(message["message"]["data"]).decode("utf-8") # disabled to test sendgrid
+    email_data = json.loads(message)
+    # email_data = message # only to test directly with swagger UI
 
     # Extract email details
     email = email_data.get("email")
