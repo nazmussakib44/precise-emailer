@@ -27,6 +27,11 @@ To run in production
 ```sh
 uvicorn main:app
 ```
+
+## Architecture
+
+![Architecture](/images/architecture.png.png?raw=true "Architecture")
+
 ## API Documentation
 
 Visit project home url /docs e.g. http://127.0.0.1:8000/docs and you will find swagger UI to test all the available API's
