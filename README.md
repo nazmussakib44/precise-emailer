@@ -30,7 +30,7 @@ uvicorn main:app
 
 ## Architecture
 
-![Architecture](/images/architecture.png.png?raw=true "Architecture")
+![Architecture](/images/architecture.png?raw=true "Architecture")
 
 ## API Documentation
 
